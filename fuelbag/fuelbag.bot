@@ -9,7 +9,7 @@
             "type": "endpoint",
             "appId": "",
             "appPassword": "",
-            "endpoint": "http://localhost:3978"
+            "endpoint": "http://localhost:3978/api/messages"
         }
     ]
 }
