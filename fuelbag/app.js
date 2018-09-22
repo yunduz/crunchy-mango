@@ -1,32 +1,22 @@
-const { BotFrameworkAdapter, MemoryStorage, ConversationState } = require('botbuilder');
-const restify = require('restify');
+var restify = require('restify');
+var builder = require('botbuilder');
 
-// Create server
-let server = restify.createServer();
+// Setup Restify Server
+var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
-    console.log(`${server.name} listening to ${server.url}`);
+   console.log('%s listening to %s', server.name, server.url); 
 });
 
-// Create adapter
-const adapter = new BotFrameworkAdapter({ 
-    appId: process.env.MICROSOFT_APP_ID, 
-    appPassword: process.env.MICROSOFT_APP_PASSWORD 
+// Create chat connector for communicating with the Bot Framework Service
+var connector = new builder.ChatConnector({
+    appId: process.env.MicrosoftAppId,
+    appPassword: process.env.MicrosoftAppPassword
 });
 
-// Add conversation state middleware
-const conversationState = new ConversationState(new MemoryStorage());
-adapter.use(conversationState);
+// Listen for messages from users 
+server.post('/api/messages', connector.listen());
 
-// Listen for incoming requests 
-server.post('/api/messages', (req, res) => {
-    // Route received request to adapter for processing
-    adapter.processActivity(req, res, (context) => {
-        if (context.activity.type === 'message') {
-            const state = conversationState.get(context);
-            const count = state.count === undefined ? state.count = 0 : ++state.count;
-            return context.sendActivity(`${count}: You said "${context.activity.text}"`);
-        } else {
-            return context.sendActivity(`[${context.activity.type} event detected]`);
-        }
-    });
+// Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
+var bot = new builder.UniversalBot(connector, function (session) {
+    session.send("You said: %s", session.message.text);
 });

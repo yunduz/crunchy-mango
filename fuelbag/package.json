@@ -1,12 +1,15 @@
 {
-    "name": "fuelbag",
-    "dependencies": {
-        "botbuilder": "^4.0.0-preview1.1",
-        "dotenv": "^2.0.0",
-        "restify": "^4.3.0"
-    },
-    "devDependencies": {
-        "@types/node": "^6.0.52",
-        "@types/restify": "^2.0.35"
-    }
+  "name": "fuelbag",
+  "version": "1.0.0",
+  "description": "Chatbot to help people in poverty find helpful resources.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yunduz Rakhmangulova & Evgeny Vinnik",
+  "license": "ISC",
+  "dependencies": {
+    "botbuilder": "^3.6.0",
+    "restify": "^7.2.1"
+  }
 }
