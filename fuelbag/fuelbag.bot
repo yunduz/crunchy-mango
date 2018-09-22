@@ -1,0 +1,15 @@
+{
+    "name": "fuelbag",
+    "description": "",
+    "secretKey": "",
+    "services": [
+        {
+            "id": "c0cc59b0-bea1-11e8-951d-9564c318c36b",
+            "name": "fuelbag",
+            "type": "endpoint",
+            "appId": "",
+            "appPassword": "",
+            "endpoint": "http://localhost:3978"
+        }
+    ]
+}
