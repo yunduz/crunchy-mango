@@ -1,5 +1,6 @@
 /*-----------------------------------------------------------------------------
-A simple Language Understanding (LUIS) bot for the Microsoft Bot Framework. 
+Weekend Fuelbag bot.
+created by Yunduz and Evgeny (c) 2018 
 -----------------------------------------------------------------------------*/
 
 // This loads the environment variables from the .env file
@@ -35,9 +36,6 @@ var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
 var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azureTableClient);
 
-// Create your bot with a function to receive messages from the user
-// This default message handler is invoked if the user's utterance doesn't
-// match any intents handled by other dialogs.
 var bot = new builder.UniversalBot(connector, function (session, args) {
     session.send('You totally reached the default message handler. You said \'%s\'.', session.message.text);
 });
@@ -55,8 +53,6 @@ const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v2.0/apps/' + luisApp
 var recognizer = new builder.LuisRecognizer(LuisModelUrl);
 bot.recognizer(recognizer);
 
-// Add a dialog for each intent that the LUIS app recognizes.
-// See https://docs.microsoft.com/en-us/bot-framework/nodejs/bot-builder-nodejs-recognize-intent-luis 
 bot.dialog('GreetingDialog',
     (session) => { 
 		var message = 'Hello there! I\'m **"Weekend FuelBag"** bot!';
@@ -89,8 +85,12 @@ bot.dialog('HelpDialog',
 
 bot.dialog('CancelDialog',
     (session) => {
-        session.send('You totally reached the Cancel intent. You said \'%s\'.', session.message.text);
+        session.send('Sure, let\'s pretend this never happened!');
         session.endDialog();
+        delete session.conversationData.isFood;
+        delete session.conversationData.isStudent;
+        delete session.conversationData.isParent;
+        delete session.conversationData.isAdult;
     }
 ).triggerAction({
     matches: 'Cancel'
@@ -98,7 +98,6 @@ bot.dialog('CancelDialog',
 
 bot.dialog('GetFoodInfoDialog',
     (session) => {
-        // session.send('You totally reached the GetFoodInfo intent. You said \'%s\'.', session.message.text);
         var message = 'Check out the following resources. I hope they help! Let me know if you have more questions!';
         if(session.conversationData.isStudent) {
             session.send(message);
@@ -122,7 +121,6 @@ bot.dialog('GetFoodInfoDialog',
 
 bot.dialog('IsStudentDialog',
     (session) => {
-        // session.send('You are totally a student. You said \'%s\'.', session.message.text);
         session.conversationData.isStudent = true;
 
         if(session.conversationData.isFood) {
@@ -138,7 +136,6 @@ bot.dialog('IsStudentDialog',
 
 bot.dialog('IsParentDialog',
     (session) => {
-        // session.send('You are totally a parent. You said \'%s\'.', session.message.text);
         session.conversationData.isParent = true;
 
         if(session.conversationData.isFood) {
@@ -154,7 +151,6 @@ bot.dialog('IsParentDialog',
 
 bot.dialog('IsAdultDialog',
     (session) => {
-        // session.send('You are totally an adult. You said \'%s\'.', session.message.text);
         session.conversationData.isAdult = true;
 
         if(session.conversationData.isFood) {
