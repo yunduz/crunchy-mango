@@ -65,6 +65,7 @@ bot.dialog('GreetingDialog',
 		message += '\n- Tutoring';
 		message += '\n- Sports';
 		message += '\n- Clothing';
+		message += '\n- Help for your pet';
 		message += '\n\nOh, and I understand human language just well!';
 		message += '\nWhat would you like to learn about?';
 		session.send(message);
@@ -76,7 +77,11 @@ bot.dialog('GreetingDialog',
 
 bot.dialog('HelpDialog',
     (session) => {
-        session.send('You totally reached the Help intent. You said \'%s\'.', session.message.text);
+        var message = 'Sure, I will help you!';
+		message += '\nJust as me about some topic like food, mental health or housing in a human language.';
+		message += '\nI will parse the information from the message and will find an answer from my knowledge base.';
+
+        session.send(message);
         session.endDialog();
     }
 ).triggerAction({
@@ -85,7 +90,7 @@ bot.dialog('HelpDialog',
 
 bot.dialog('CancelDialog',
     (session) => {
-        session.send('Sure, let\'s pretend this never happened!');
+        session.send('Sure, let\'s pretend this never happened! What can I help you with?');
         session.endDialog();
         delete session.conversationData.isFood;
         delete session.conversationData.isStudent;
@@ -162,6 +167,62 @@ bot.dialog('IsAdultDialog',
     }
 ).triggerAction({
     matches: 'IsAdult'
+})
+
+
+bot.dialog('GetChildCareInfoDialog',
+    (session) => {
+        session.send("Here are some resources for affordable child care.")
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'GetChildCareInfo'
+})
+
+bot.dialog('GetClothingInfoDialog',
+    (session) => {
+        session.send("Here are some resources about clothing.")
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'GetClothingInfo'
+})
+
+bot.dialog('GetMentalHealthInfoDialog',
+    (session) => {
+        session.send("Here are some resources about mental health.")
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'GetMentalHealthInfo'
+})
+
+bot.dialog('GetPetInfoDialog',
+    (session) => {
+        session.send("Here are some resources about help for your pet.")
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'GetPetInfo'
+})
+
+
+bot.dialog('GetSportsInfoDialog',
+    (session) => {
+        session.send("Here are some resources about sports equipment and participation.")
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'GetSportsInfo'
+})
+
+bot.dialog('GetTutoringInfoDialog',
+    (session) => {
+        session.send("Here are some resources about tutoring.")
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'GetTutoringInfo'
 })
 
 // Helpers
