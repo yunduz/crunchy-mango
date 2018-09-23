@@ -99,14 +99,15 @@ bot.dialog('CancelDialog',
 bot.dialog('GetFoodInfoDialog',
     (session) => {
         session.send('You totally reached the GetFoodInfo intent. You said \'%s\'.', session.message.text);
-        if(session.userData.isStudent) {
+        console.log('123'+session.conversationData.isStudent);
+        if(session.conversationData.isStudent) {
             session.send(getStudentFoodInfo());
-        } else if (session.userData.isAdult) {
-
-        } else if (session.userData.isParent) {
-
+        } else if (session.conversationData.isAdult) {
+            session.send(getAdultFoodInfo());
+        } else if (session.conversationData.isParent) {
+            session.send(getParentFoodInfo());
         } else {
-            session.userData.isFood = true;
+            session.conversationData.isFood = true;
             session.send('Are you a student, parent or adult?');
             session.endDialog();
         }
@@ -119,12 +120,12 @@ bot.dialog('GetFoodInfoDialog',
 bot.dialog('IsStudentDialog',
     (session) => {
         session.send('You are totally a student. You said \'%s\'.', session.message.text);
-        session.userData.isStudent = true;
+        session.conversationData.isStudent = true;
 
-        if(session.userData.isFood) {
+        if(session.conversationData.isFood) {
             var message = getStudentFoodInfo();
             session.send(message);
-            delete session.userData.isFood;
+            delete session.conversationData.isFood;
         }
         session.endDialog();
     }
@@ -135,6 +136,12 @@ bot.dialog('IsStudentDialog',
 bot.dialog('IsParentDialog',
     (session) => {
         session.send('You are totally a parent. You said \'%s\'.', session.message.text);
+        session.conversationData.isParent = true;
+
+        if(session.conversationData.isFood) {
+            session.send(getParentFoodInfo());
+            delete session.conversationData.isFood;
+        }
         session.endDialog();
     }
 ).triggerAction({
@@ -144,6 +151,12 @@ bot.dialog('IsParentDialog',
 bot.dialog('IsAdultDialog',
     (session) => {
         session.send('You are totally an adult. You said \'%s\'.', session.message.text);
+        session.conversationData.isAdult = true;
+
+        if(session.conversationData.isFood) {
+            session.send(getAdultFoodInfo());
+            delete session.conversationData.isFood;
+        }
         session.endDialog();
     }
 ).triggerAction({
@@ -174,14 +187,48 @@ function infoAsAttachmentThumbnail(review) {
 function getStudentFoodInfo() {
     return new builder.Message()
                 .attachmentLayout(builder.AttachmentLayout.carousel)
-                .attachments([...infoFood, ...infoFoodStudents].map(infoAsAttachmentHero));
+                .attachments([...infoFoodStudents, ...infoFood].map(infoAsAttachmentHero));
+}
+
+function getAdultFoodInfo() {
+    return new builder.Message()
+                .attachmentLayout(builder.AttachmentLayout.carousel)
+                .attachments(infoFood.map(infoAsAttachmentHero));    
+}
+
+function getParentFoodInfo() {
+    return new builder.Message()
+                .attachmentLayout(builder.AttachmentLayout.carousel)
+                .attachments([...infoFoodParent, ...infoFood].map(infoAsAttachmentHero));    
 }
 
 var infoFood = [
     {   name:'The Greater Vancouver Food Bank', 
         info:'The Greater Vancouver Food Bank provides a 2-3 day food supplement to thousands of people each week by way of locations throughout the Greater Vancouver area.', 
         url: 'https://foodbank.bc.ca/find-help/', 
-        image:'https://foodbank.bc.ca/wp-content/themes/foodbank/images/logo.png'}
+        image:'https://foodbank.bc.ca/wp-content/themes/foodbank/images/logo.png'
+    },
+    {
+        name:'The Door is Open',
+        info:'Soup and sandwich free lunch',
+        url:'http://www.thedoorisopen.ca/free-lunch-program/',
+        image:'http://www.thedoorisopen.ca/wp-content/uploads/2017/11/cropped-rcav-full_colour_reverse-300_md-rgb_digital.png'
+    },
+    {
+        name:'Carnegie Centre cafeteria and kitchen',
+        info:'The Carnegie Community Centre cafeteria is open seven days a week, 365 days a year. Meals are provided at an extremely low cost to assure that local low-income residents can readily access nutritious, fresh and affordable food.',
+        url:'https://vancouver.ca/parks-recreation-culture/carnegie-centre-cafeteria.aspx',
+        image:'https://vancouver.ca/images/cov/ui/covLogo.png'        
+    }
+];
+
+var infoFoodParent = [
+    {
+        name:'SPFoodBank',
+        info:'Home delivered food hampers for single parents that cannot use their local foodbanks',
+        url:'http://www.spfoodbank.org/',
+        image:''
+    }
 ];
 
 var infoFoodStudents = [
