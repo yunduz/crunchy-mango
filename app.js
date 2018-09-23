@@ -2,6 +2,9 @@
 A simple Language Understanding (LUIS) bot for the Microsoft Bot Framework. 
 -----------------------------------------------------------------------------*/
 
+// This loads the environment variables from the .env file
+require('dotenv-extended').load();
+
 var restify = require('restify');
 var builder = require('botbuilder');
 var botbuilder_azure = require("botbuilder-azure");
