@@ -104,9 +104,29 @@ bot.dialog('GetFoodInfoDialog',
     matches: 'GetFoodInfo'
 })
 
+var infoFood = [
+    {   name:'The Greater Vancouver Food Bank', 
+        info:'The Greater Vancouver Food Bank provides a 2-3 day food supplement to thousands of people each week by way of locations throughout the Greater Vancouver area.', 
+        url: 'https://foodbank.bc.ca/find-help/', 
+        image:'https://foodbank.bc.ca/wp-content/themes/foodbank/images/logo.png'}
+];
+
+var infoFoodStudents = [
+    {   name:'Simon Fraser Student Society Food Bank', 
+        info:'Facing hunger or serious financial pressures? Apply for and redeem a $25 food certificate up to 3 times per semester.', 
+        url: 'http://sfss.ca/services/general-office-services/food-bank-program/', 
+        image:'http://sfss.ca/wp-content/themes/sfss/img/sfss-logo-small.png'}
+];
+
 bot.dialog('IsStudentDialog',
     (session) => {
         session.send('You are totally a student. You said \'%s\'.', session.message.text);
+        if(session.userData.isFood) {
+            var message = new builder.Message()
+                .attachmentLayout(builder.AttachmentLayout.carousel)
+                .attachments([...infoFood, ...infoFoodStudents].map(infoAsAttachmentHero));
+            session.send(message);
+        }
         session.endDialog();
     }
 ).triggerAction({
@@ -130,3 +150,24 @@ bot.dialog('IsAdultDialog',
 ).triggerAction({
     matches: 'IsAdult'
 })
+
+// Helpers
+function infoAsAttachmentHero(info) {
+    return new builder.HeroCard()
+        .title(info.name)
+        .subtitle('%s', info.info)
+        .images([new builder.CardImage().url(info.image)])
+        .buttons([
+            new builder.CardAction()
+                .title('More details')
+                .type('openUrl')
+                .value(info.url)
+        ]);
+}
+
+function infoAsAttachmentThumbnail(review) {
+    return new builder.ThumbnailCard()
+        .title(review.title)
+        .text(review.text)
+        .images([new builder.CardImage().url(review.image)]);
+}
