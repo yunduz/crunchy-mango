@@ -112,3 +112,21 @@ bot.dialog('IsStudentDialog',
 ).triggerAction({
     matches: 'IsStudent'
 })
+
+bot.dialog('IsParentDialog',
+    (session) => {
+        session.send('You are totally a parent. You said \'%s\'.', session.message.text);
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'IsParent'
+})
+
+bot.dialog('IsAdultDialog',
+    (session) => {
+        session.send('You are totally an adult. You said \'%s\'.', session.message.text);
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'IsAdult'
+})
