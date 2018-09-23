@@ -58,8 +58,20 @@ bot.recognizer(recognizer);
 // Add a dialog for each intent that the LUIS app recognizes.
 // See https://docs.microsoft.com/en-us/bot-framework/nodejs/bot-builder-nodejs-recognize-intent-luis 
 bot.dialog('GreetingDialog',
-    (session) => {
-        session.send('You totally reached the Greeting intent. You said \'%s\'.', session.message.text);
+    (session) => { 
+		var message = 'Hello there! I\'m **"Weekend FuelBag"** bot!';
+		message += '\nI know a lot of information about various resources for low income families and individuals.';
+		message += '\nFor example, you can ask me about:';
+		message += '\n- Food';
+		message += '\n- Mental health';
+		message += '\n- Housing';
+		message += '\n- Child care';
+		message += '\n- Tutoring';
+		message += '\n- Sports';
+		message += '\n- Clothing';
+		message += '\n\nOh, and I understand human language just well!';
+		message += '\nWhat would you like to learn about?';
+		session.send(message);
         session.endDialog();
     }
 ).triggerAction({
