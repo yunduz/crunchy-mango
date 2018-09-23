@@ -81,3 +81,11 @@ bot.dialog('CancelDialog',
     matches: 'Cancel'
 })
 
+bot.dialog('GetFoodInfoDialog',
+    (session) => {
+        session.send('You totally reached the GetFoodInfo intent. You said \'%s\'.', session.message.text);
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'GetFoodInfo'
+})
