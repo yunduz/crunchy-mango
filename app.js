@@ -98,13 +98,16 @@ bot.dialog('CancelDialog',
 
 bot.dialog('GetFoodInfoDialog',
     (session) => {
-        session.send('You totally reached the GetFoodInfo intent. You said \'%s\'.', session.message.text);
-        console.log('123'+session.conversationData.isStudent);
+        // session.send('You totally reached the GetFoodInfo intent. You said \'%s\'.', session.message.text);
+        var message = 'Check out the following resources. I hope they help! Let me know if you have more questions!';
         if(session.conversationData.isStudent) {
+            session.send(message);
             session.send(getStudentFoodInfo());
         } else if (session.conversationData.isAdult) {
+            session.send(message);
             session.send(getAdultFoodInfo());
         } else if (session.conversationData.isParent) {
+            session.send(message);
             session.send(getParentFoodInfo());
         } else {
             session.conversationData.isFood = true;
@@ -119,12 +122,12 @@ bot.dialog('GetFoodInfoDialog',
 
 bot.dialog('IsStudentDialog',
     (session) => {
-        session.send('You are totally a student. You said \'%s\'.', session.message.text);
+        // session.send('You are totally a student. You said \'%s\'.', session.message.text);
         session.conversationData.isStudent = true;
 
         if(session.conversationData.isFood) {
-            var message = getStudentFoodInfo();
-            session.send(message);
+            session.send('Check out these resources. Hope this helps! Stay in school :) !');
+            session.send(getStudentFoodInfo());
             delete session.conversationData.isFood;
         }
         session.endDialog();
@@ -135,10 +138,11 @@ bot.dialog('IsStudentDialog',
 
 bot.dialog('IsParentDialog',
     (session) => {
-        session.send('You are totally a parent. You said \'%s\'.', session.message.text);
+        // session.send('You are totally a parent. You said \'%s\'.', session.message.text);
         session.conversationData.isParent = true;
 
         if(session.conversationData.isFood) {
+            session.send('Being a parent is not easy but I hope these resources help!');
             session.send(getParentFoodInfo());
             delete session.conversationData.isFood;
         }
@@ -150,10 +154,11 @@ bot.dialog('IsParentDialog',
 
 bot.dialog('IsAdultDialog',
     (session) => {
-        session.send('You are totally an adult. You said \'%s\'.', session.message.text);
+        // session.send('You are totally an adult. You said \'%s\'.', session.message.text);
         session.conversationData.isAdult = true;
 
         if(session.conversationData.isFood) {
+            session.send('Check out these resources, hope they help! Let me know if you have more questions.');
             session.send(getAdultFoodInfo());
             delete session.conversationData.isFood;
         }
