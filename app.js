@@ -100,7 +100,7 @@ bot.dialog('GetFoodInfoDialog',
     (session) => {
         session.send('You totally reached the GetFoodInfo intent. You said \'%s\'.', session.message.text);
         if(session.userData.isStudent) {
-
+            session.send(getStudentFoodInfo());
         } else if (session.userData.isAdult) {
 
         } else if (session.userData.isParent) {
@@ -116,28 +116,15 @@ bot.dialog('GetFoodInfoDialog',
     matches: 'GetFoodInfo'
 })
 
-var infoFood = [
-    {   name:'The Greater Vancouver Food Bank', 
-        info:'The Greater Vancouver Food Bank provides a 2-3 day food supplement to thousands of people each week by way of locations throughout the Greater Vancouver area.', 
-        url: 'https://foodbank.bc.ca/find-help/', 
-        image:'https://foodbank.bc.ca/wp-content/themes/foodbank/images/logo.png'}
-];
-
-var infoFoodStudents = [
-    {   name:'Simon Fraser Student Society Food Bank', 
-        info:'Facing hunger or serious financial pressures? Apply for and redeem a $25 food certificate up to 3 times per semester.', 
-        url: 'http://sfss.ca/services/general-office-services/food-bank-program/', 
-        image:'http://sfss.ca/wp-content/themes/sfss/img/sfss-logo-small.png'}
-];
-
 bot.dialog('IsStudentDialog',
     (session) => {
         session.send('You are totally a student. You said \'%s\'.', session.message.text);
+        session.userData.isStudent = true;
+
         if(session.userData.isFood) {
-            var message = new builder.Message()
-                .attachmentLayout(builder.AttachmentLayout.carousel)
-                .attachments([...infoFood, ...infoFoodStudents].map(infoAsAttachmentHero));
+            var message = getStudentFoodInfo();
             session.send(message);
+            delete session.userData.isFood;
         }
         session.endDialog();
     }
@@ -183,3 +170,42 @@ function infoAsAttachmentThumbnail(review) {
         .text(review.text)
         .images([new builder.CardImage().url(review.image)]);
 }
+
+function getStudentFoodInfo() {
+    return new builder.Message()
+                .attachmentLayout(builder.AttachmentLayout.carousel)
+                .attachments([...infoFood, ...infoFoodStudents].map(infoAsAttachmentHero));
+}
+
+var infoFood = [
+    {   name:'The Greater Vancouver Food Bank', 
+        info:'The Greater Vancouver Food Bank provides a 2-3 day food supplement to thousands of people each week by way of locations throughout the Greater Vancouver area.', 
+        url: 'https://foodbank.bc.ca/find-help/', 
+        image:'https://foodbank.bc.ca/wp-content/themes/foodbank/images/logo.png'}
+];
+
+var infoFoodStudents = [
+    {   name:'Simon Fraser Student Society Food Bank', 
+        info:'Facing hunger or serious financial pressures? Apply for and redeem a $25 food certificate up to 3 times per semester.', 
+        url:'http://sfss.ca/services/general-office-services/food-bank-program/', 
+        image:'http://sfss.ca/wp-content/themes/sfss/img/sfss-logo-small.png'
+    },
+    {
+        name:'The AMS Food Bank',
+        info:'The AMS Food Bank is an emergency food relief service for UBC students in need. We offer various non-perishable foods, personal hygiene supplies, budgeting tips and information on additional resources in and around Vancouver. ',
+        url:'http://www.ams.ubc.ca/student-services/food-bank/',
+        image:'https://media.licdn.com/dms/image/C4D0BAQES4IiirDR_rg/company-logo_200_200/0?e=2159024400&v=beta&t=cUxThl5Yi83iINU0Xe4KATELq-4X-18m9JFIhry1zkc'
+    },
+    {
+        name:'Weekend Fuelbag',
+        info:'They give students in need access to food on weekends so they can come to school ready to learn.',
+        url:'https://weekendfuelbag.ca/',
+        image:'http://vanhacks.com/img/logos/weekend-fuelbag-logo-white.png'
+    },
+    {
+        name:'Directions Youth Services',
+        info:'Directions Youth Services is a Vancouver based resource that provides support to at-risk, homeless, or street-involved youth and young adults under 25.',
+        url:'https://directionsyouthservices.ca/drop-in-centre/food-program/',
+        image:'http://directionsyouthservices.ca/wp-content/uploads/2016/06/DIRECTIONS-YS_RGB1.jpg'
+    }
+];
