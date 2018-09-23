@@ -87,8 +87,28 @@ bot.dialog('CancelDialog',
 bot.dialog('GetFoodInfoDialog',
     (session) => {
         session.send('You totally reached the GetFoodInfo intent. You said \'%s\'.', session.message.text);
+        if(session.userData.isStudent) {
+
+        } else if (session.userData.isAdult) {
+
+        } else if (session.userData.isParent) {
+
+        } else {
+            session.userData.isFood = true;
+            session.send('Are you a student, parent or adult?');
+            session.endDialog();
+        }
         session.endDialog();
     }
 ).triggerAction({
     matches: 'GetFoodInfo'
+})
+
+bot.dialog('IsStudentDialog',
+    (session) => {
+        session.send('You are totally a student. You said \'%s\'.', session.message.text);
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'IsStudent'
 })
