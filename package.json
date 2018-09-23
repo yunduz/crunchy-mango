@@ -1,7 +1,7 @@
 {
-  "name": "luisbot",
+  "name": "fuelbag",
   "version": "1.0.0",
-  "description": "",
+  "description": "Chatbot to help people in poverty find helpful resources.",
   "main": "index.js",
   "dependencies": {
     "botbuilder": "^3.13.1",
