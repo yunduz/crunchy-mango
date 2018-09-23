@@ -210,6 +210,7 @@ bot.dialog('GetPetInfoDialog',
 bot.dialog('GetSportsInfoDialog',
     (session) => {
         session.send("Here are some resources about sports equipment and participation.")
+        session.send(getSportsInfo());
         session.endDialog();
     }
 ).triggerAction({
@@ -218,7 +219,7 @@ bot.dialog('GetSportsInfoDialog',
 
 bot.dialog('GetTutoringInfoDialog',
     (session) => {
-        session.send("Here are some resources about tutoring.")
+        session.send("Here are some resources about tutoring.");
         session.endDialog();
     }
 ).triggerAction({
@@ -239,11 +240,10 @@ function infoAsAttachmentHero(info) {
         ]);
 }
 
-function infoAsAttachmentThumbnail(review) {
-    return new builder.ThumbnailCard()
-        .title(review.title)
-        .text(review.text)
-        .images([new builder.CardImage().url(review.image)]);
+function getSportsInfo() {
+    return new builder.Message()
+                .attachmentLayout(builder.AttachmentLayout.carousel)
+                .attachments(infoSports.map(infoAsAttachmentHero));
 }
 
 function getStudentFoodInfo() {
@@ -316,5 +316,27 @@ var infoFoodStudents = [
         info:'Directions Youth Services is a Vancouver based resource that provides support to at-risk, homeless, or street-involved youth and young adults under 25.',
         url:'https://directionsyouthservices.ca/drop-in-centre/food-program/',
         image:'http://directionsyouthservices.ca/wp-content/uploads/2016/06/DIRECTIONS-YS_RGB1.jpg'
+    }
+];
+
+var infoSports = [
+    {   name:'Athletics for Kids (A4K)', 
+        info:'A4K’s overarching goal is to be there to assist any B.C. child in their dream of playing amateur sports. We want all kids to have the opportunity to play.', 
+        url:'https://www.a4k.ca/', 
+    },
+    {
+        name:'Vancouver Kidsport',
+        info:'KidSport™ was established by Sport BC in 1993 and is a community based sport charity. Since its inception in British Columbia, KidSport™ has grown to include national and provincial/territorial chapters operating across Canada. There are now more than 180 local community chapters that have raised in excess of $5 million dollars and provided a season of sport to more than 45,000 Canadian children in 65 different sports.',
+        url:'http://www.kidsportcanada.ca/british-columbia/vancouver/',
+     },
+    {
+        name:'Canadian Tire Jumpstart',
+        info:'Raising funds. Lifting spirits. Supporting dreams. Jumpstart is more than just about getting kids active. It’s about giving kids from families in financial need the same chance to participate as their neighbours, their classmates and their friends. Whether it’s the chance to try a new sport or to continue with a favourite one, no kid should be left out.',
+        url:'http://jumpstart.canadiantire.ca/en.html',
+    },
+    {
+        name:'Hockey Access Fund',
+        info:'The VMHA Hockey Access Fund was created in conjunction with the Britannia Community Centre to provide opportunity to those under the age of 18 without adequate financial means, the ability to access funds allowing them to participate in organized hockey within the Vancouver Minor Hockey Association.',
+        url:'https://www.vmha.com/wp-content/uploads/sites/885/2017/10/VMHA-Hockey-Access-Fund-Application-and-Information-.pdf',
     }
 ];
